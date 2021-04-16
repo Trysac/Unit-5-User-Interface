@@ -11,22 +11,46 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text score;
     [SerializeField] GameObject gameOver;
     [SerializeField] GameObject gameOverButton;
+    [SerializeField] GameObject canvas;
 
     int points;
     bool isGameActive;
+    bool isCalled;
+
+    private void Awake()
+    {
+        if (FindObjectsOfType<GameManager>().Length > 1) 
+        {
+            Destroy(gameObject);
+        }
+        else 
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+    }
 
     void Start()
     {
-        isGameActive = true;
+        isGameActive = false;
+        isCalled = false;
 
         UpdateScore(0);
-        StartCoroutine(SpawnTarget());
     }
 
 
     void Update()
     {
-        
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            canvas.SetActive(true);
+            isGameActive = true;
+            if (!isCalled) 
+            { 
+                StartCoroutine(SpawnTarget());
+                isCalled = true;
+            }
+            
+        }
     }
 
     private IEnumerator SpawnTarget() 
@@ -51,6 +75,12 @@ public class GameManager : MonoBehaviour
 
         gameOver.SetActive(true);
         gameOverButton.SetActive(true);
+    }
+
+    public void StartGame(int difficulty) 
+    {
+        spawnRate = difficulty/3;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void RestarGame() 
