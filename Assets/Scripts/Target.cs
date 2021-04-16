@@ -9,15 +9,18 @@ public class Target : MonoBehaviour
     [SerializeField] float maxSpeed = 18f;
     [SerializeField] float xRange = 4f;
     [SerializeField] float ySpawnPos = -6f;
-    //[SerializeField] float force = 0f;
+    [SerializeField] int points = 5;
+    [SerializeField] ParticleSystem explotion;
 
     Rigidbody myRigidbody;
+    GameManager gameManager;
 
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody>();
         myRigidbody.AddForce(RandomForce(), ForceMode.Impulse);
         myRigidbody.AddTorque(RandomTorque(), ForceMode.Impulse);
+        gameManager = FindObjectOfType<GameManager>();
 
         transform.position = RandomSpawnPosition();
     }
@@ -29,7 +32,9 @@ public class Target : MonoBehaviour
     }
 
     private void OnMouseDown() 
-    { 
+    {
+        gameManager.UpdateScore(points);
+        Instantiate(explotion,transform.position,explotion.transform.rotation);
         Destroy(gameObject); 
     }
 
