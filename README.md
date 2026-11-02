@@ -71,7 +71,7 @@ an opt-in hook: run a built player with `-screenshot <folder>` (optionally
   every candy you let fall costs one.
 - **Difficulty** sets how often targets are tossed (Easy starts at one every 1.05 s and tightens
   to 0.6 s over the first minute; Hard goes from 0.7 s to 0.3 s), how hard they are thrown, the
-  mix (bombs are 3% of the tosses on Easy, 6% on Normal and 9% on Hard) and how often two fly
+  mix (bombs are 3% of single tosses on Easy, 6% on Normal and 9% on Hard; the second target of a pair is never a bomb) and how often two fly
   at once.
 - **Power-ups.** The clock slows every target to 45% speed for 5 seconds (the round clock keeps
   real time). The magnet turns every click into a wide pull for 6 seconds that collects all
