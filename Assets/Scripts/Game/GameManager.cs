@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     readonly ScoreBoard scoreBoard = new ScoreBoard();
     SpawnClock spawnClock;
     bool isGameActive;
-    bool isSpawning;
+    bool roundStarted;
 
     public int Points => scoreBoard.Points;
 
@@ -37,24 +37,19 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         isGameActive = false;
-        isSpawning = false;
+        roundStarted = false;
         UpdateScore(0);
     }
 
     void Update()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 1)
+        // The manager outlives the scenes, so a round begins once each time the game scene loads.
+        if (!roundStarted && SceneManager.GetActiveScene().buildIndex == 1)
         {
-            canvas.SetActive(true);
-            isGameActive = true;
-            if (!isSpawning)
-            {
-                spawnClock = new SpawnClock(spawnRate);
-                isSpawning = true;
-            }
+            BeginRound();
         }
 
-        if (isSpawning && isGameActive)
+        if (isGameActive)
         {
             int due = spawnClock.Advance(Time.deltaTime);
             for (int i = 0; i < due; i++)
@@ -62,6 +57,18 @@ public class GameManager : MonoBehaviour
                 Instantiate(targets[Random.Range(0, targets.Count)]);
             }
         }
+    }
+
+    void BeginRound()
+    {
+        roundStarted = true;
+        canvas.SetActive(true);
+        gameOver.SetActive(false);
+        gameOverButton.SetActive(false);
+        scoreBoard.Reset();
+        score.text = scoreBoard.Label;
+        spawnClock = new SpawnClock(spawnRate);
+        isGameActive = true;
     }
 
     public void UpdateScore(int points)
@@ -85,6 +92,8 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
+        roundStarted = false;
+        isGameActive = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
