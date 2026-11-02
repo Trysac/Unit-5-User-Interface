@@ -20,7 +20,7 @@ public class Target : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody>();
         myRigidbody.AddForce(RandomForce(), ForceMode.Impulse);
         myRigidbody.AddTorque(RandomTorque(), ForceMode.Impulse);
-        gameManager = FindObjectOfType<GameManager>();
+        gameManager = FindFirstObjectByType<GameManager>();
 
         transform.position = RandomSpawnPosition();
     }

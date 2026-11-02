@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (FindObjectsOfType<GameManager>().Length > 1) 
+        if (FindObjectsByType<GameManager>(FindObjectsSortMode.None).Length > 1) 
         {
             Destroy(gameObject);
         }
