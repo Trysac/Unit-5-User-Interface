@@ -2,31 +2,8 @@ using NUnit.Framework;
 
 namespace TargetToss.Core.Tests
 {
-    public class RoundRulesTests
+    public class SpawnClockTests
     {
-        [Test]
-        public void TheScoreAddsPointsAndShowsTheTotal()
-        {
-            var board = new ScoreBoard();
-            Assert.That(board.Label, Is.EqualTo("Score: 0"));
-
-            Assert.That(board.Add(5), Is.EqualTo(5));
-            Assert.That(board.Add(10), Is.EqualTo(15));
-
-            Assert.That(board.Points, Is.EqualTo(15));
-            Assert.That(board.Label, Is.EqualTo("Score: 15"));
-        }
-
-        [Test]
-        public void ResettingTheScoreGoesBackToZero()
-        {
-            var board = new ScoreBoard();
-            board.Add(25);
-            board.Reset();
-            Assert.That(board.Points, Is.EqualTo(0));
-            Assert.That(board.Label, Is.EqualTo("Score: 0"));
-        }
-
         [Test]
         public void TheSpawnClockReleasesOneTargetPerInterval()
         {

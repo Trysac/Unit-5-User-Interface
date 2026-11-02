@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8af62970fb262a47b10f324b85c61e6, type: 3}
+  m_Name: GameArt
+  m_EditorClassIdentifier: TargetToss.Game::TargetToss.Game.GameArt
+  Glow: {fileID: 2100000, guid: c1f78000e95e17b46a2bda11666e5b56, type: 2}
+  TitleMusic: {fileID: 8300000, guid: e8565d6b4464e484ab239b8b2d8eb821, type: 3}
+  PlayMusic: {fileID: 8300000, guid: e99db2a41b80f3641bee36260294c5cf, type: 3}
+  Pop: {fileID: 8300000, guid: 685fa43a745e08147a2ab8a0d4c3c94d, type: 3}
+  Bonus: {fileID: 8300000, guid: e05297d3283b8544e94db88f8bedab92, type: 3}
+  Bad: {fileID: 8300000, guid: 0a54a4585316e3447b266bc07f7d958c, type: 3}
+  Bomb: {fileID: 8300000, guid: 22a9fc2c96e93c54cb23f4d0fd4b94ef, type: 3}
+  Whiff: {fileID: 8300000, guid: 5949a249dee457b49baf0e55823f4506, type: 3}
+  Fell: {fileID: 8300000, guid: 745aebdcd9132a746bbd118da1e522dd, type: 3}
+  SlowTime: {fileID: 8300000, guid: 46a7323f259e9e142b30357dc04e73ad, type: 3}
+  Magnet: {fileID: 8300000, guid: afa16cd3172d9d440954e0557db235c6, type: 3}
+  PowerEnd: {fileID: 8300000, guid: c8e33d18298c9eb4f8434d42404ef462, type: 3}
+  Multiplier: {fileID: 8300000, guid: 92e29c14be1c7ac42b9b5a0beb6939c9, type: 3}
+  ComboBreak: {fileID: 8300000, guid: 3a53beb06e6365748ba0bc1e329c61ae, type: 3}
+  LifeLost: {fileID: 8300000, guid: 8aba2dd044378234fb0c7a2f64230455, type: 3}
+  Tick: {fileID: 8300000, guid: 7bd4c69b529622d4b9a4fff799e40cac, type: 3}
+  TimeUp: {fileID: 8300000, guid: 7b2142475479f0b4eaadcc9e6453e362, type: 3}
+  NewRecord: {fileID: 8300000, guid: 12f64f4feb5d99d439c8442aafec7b55, type: 3}
+  RoundOver: {fileID: 8300000, guid: 6789f792584c4414d9494e4e01ba0ff8, type: 3}
+  Go: {fileID: 8300000, guid: 902c805cce95de349a19ddaca7a1ade4, type: 3}
+  Move: {fileID: 8300000, guid: 55914153ca6cad74b9bb29dbba46cc13, type: 3}
+  Select: {fileID: 8300000, guid: e10126c5aad270245b5245607522cadd, type: 3}
+  Pause: {fileID: 8300000, guid: 9f489fc897b9c72438f3e9fc367a62b2, type: 3}

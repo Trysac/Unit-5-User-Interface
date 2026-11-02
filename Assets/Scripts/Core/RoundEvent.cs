@@ -38,9 +38,12 @@ namespace TargetToss.Core
         public readonly Vec2 Position;
         public readonly int Points;
         public readonly float Value;
+        /// <summary>The popped target's colour variant.</summary>
+        public readonly int Variant;
 
-        public RoundEvent(RoundEventKind kind, TargetKind target, Vec2 position, int points = 0, float value = 0f)
+        public RoundEvent(RoundEventKind kind, TargetKind target, Vec2 position, int points = 0, float value = 0f, int variant = 0)
         {
+            Variant = variant;
             Kind = kind;
             Target = target;
             Position = position;

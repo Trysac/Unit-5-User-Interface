@@ -1,9 +1,9 @@
 {
     "name": "TargetToss.Game",
-    "rootNamespace": "",
+    "rootNamespace": "TargetToss.Game",
     "references": [
         "TargetToss.Core",
-        "UnityEngine.UI"
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

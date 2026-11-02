@@ -33,7 +33,7 @@ namespace TargetToss.Core.Tests
         public void ClickingAGoodTargetPopsItForTenPoints()
         {
             Round round = Quiet(GameMode.Timed);
-            Target target = round.Place(TargetKind.Good, new Vec2(1f, 1f), Still);
+            Target target = round.Place(TargetKind.Good, new Vec2(1f, 1f), Still, variant: 2);
 
             round.Click(new Vec2(1.3f, 1.2f));
 
@@ -44,6 +44,7 @@ namespace TargetToss.Core.Tests
             RoundEvent popped = round.Events.Single(e => e.Kind == RoundEventKind.Popped);
             Assert.That(popped.Points, Is.EqualTo(10));
             Assert.That(popped.Position, Is.EqualTo(new Vec2(1f, 1f)));
+            Assert.That(popped.Variant, Is.EqualTo(2), "the view colours the burst like the target");
             Assert.That(round.Accuracy, Is.EqualTo(1f));
         }
 

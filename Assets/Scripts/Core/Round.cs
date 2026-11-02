@@ -246,7 +246,7 @@ namespace TargetToss.Core
                     Popped++;
                     int before = Score.Multiplier;
                     int points = Score.Pop(target.Kind == TargetKind.Bonus ? BonusPoints : GoodPoints);
-                    events.Add(new RoundEvent(RoundEventKind.Popped, target.Kind, at, points, Score.Combo));
+                    events.Add(new RoundEvent(RoundEventKind.Popped, target.Kind, at, points, Score.Combo, target.Variant));
                     if (Score.Multiplier > before)
                     {
                         events.Add(new RoundEvent(RoundEventKind.MultiplierUp, target.Kind, at, 0, Score.Multiplier));

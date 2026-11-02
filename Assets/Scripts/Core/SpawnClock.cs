@@ -2,7 +2,7 @@ namespace TargetToss.Core
 {
     /// <summary>
     /// Counts game time and says how many targets are due, one every <see cref="Interval"/>
-    /// seconds. It replaces a coroutine that waited <c>spawnRate</c> seconds between spawns; like
+    /// seconds. It replaced the 2021 coroutine that waited <c>spawnRate</c> seconds between spawns; like
     /// that coroutine, an interval of zero or less spawns once per step.
     /// </summary>
     public sealed class SpawnClock
