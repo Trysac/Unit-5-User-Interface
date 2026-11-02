@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,12 +15,7 @@ public class DifficultyButton : MonoBehaviour
         button.onClick.AddListener(SetDifficulty);
     }
 
-    void Update()
-    {
-        
-    }
-
-    private void SetDifficulty() 
+    void SetDifficulty()
     {
         gameManager.StartGame(choice);
     }

@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using TargetToss.Core;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,17 +13,22 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject gameOverButton;
     [SerializeField] GameObject canvas;
 
-    int points;
+    readonly ScoreBoard scoreBoard = new ScoreBoard();
+    SpawnClock spawnClock;
     bool isGameActive;
-    bool isCalled;
+    bool isSpawning;
 
-    private void Awake()
+    public int Points => scoreBoard.Points;
+
+    public float SpawnInterval => spawnRate;
+
+    void Awake()
     {
-        if (FindObjectsByType<GameManager>(FindObjectsSortMode.None).Length > 1) 
+        if (FindObjectsByType<GameManager>(FindObjectsSortMode.None).Length > 1)
         {
             Destroy(gameObject);
         }
-        else 
+        else
         {
             DontDestroyOnLoad(gameObject);
         }
@@ -32,11 +37,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         isGameActive = false;
-        isCalled = false;
-
+        isSpawning = false;
         UpdateScore(0);
     }
-
 
     void Update()
     {
@@ -44,51 +47,48 @@ public class GameManager : MonoBehaviour
         {
             canvas.SetActive(true);
             isGameActive = true;
-            if (!isCalled) 
-            { 
-                StartCoroutine(SpawnTarget());
-                isCalled = true;
+            if (!isSpawning)
+            {
+                spawnClock = new SpawnClock(spawnRate);
+                isSpawning = true;
             }
-            
         }
-    }
 
-    private IEnumerator SpawnTarget() 
-    {
-        while (isGameActive)
+        if (isSpawning && isGameActive)
         {
-            yield return new WaitForSeconds(spawnRate);
-            int index = Random.Range(0, targets.Count);
-            Instantiate(targets[index]);
+            int due = spawnClock.Advance(Time.deltaTime);
+            for (int i = 0; i < due; i++)
+            {
+                Instantiate(targets[Random.Range(0, targets.Count)]);
+            }
         }
     }
 
-    public void UpdateScore(int p) 
+    public void UpdateScore(int points)
     {
-        points += p;
-        score.text = "Score: " + points.ToString();
+        scoreBoard.Add(points);
+        score.text = scoreBoard.Label;
     }
 
-    public void GameOver() 
+    public void GameOver()
     {
         isGameActive = false;
-
         gameOver.SetActive(true);
         gameOverButton.SetActive(true);
     }
 
-    public void StartGame(int difficulty) 
+    public void StartGame(int difficulty)
     {
-        spawnRate = difficulty/3;
+        spawnRate = difficulty / 3;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    public void RestarGame() 
+    public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public bool GetIsGameActive() 
+    public bool GetIsGameActive()
     {
         return isGameActive;
     }
