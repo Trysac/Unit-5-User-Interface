@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame(int difficulty)
     {
-        spawnRate = difficulty / 3;
+        spawnRate = DifficultyRules.SpawnInterval(difficulty);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
