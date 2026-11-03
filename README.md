@@ -18,6 +18,16 @@ Junior Programmer pathway**, and was rebuilt on that idea as an original game (s
 | ![How to play: what every target does](docs/screenshots/howto.png) | ![High scores for each mode and difficulty](docs/screenshots/records.png) |
 | ![Pause menu over a frozen round](docs/screenshots/pause.png) | |
 
+## Play it
+
+- **In your browser:** [trysac.github.io/Unit-5-User-Interface](https://trysac.github.io/Unit-5-User-Interface/)
+- **On itch.io:** [trysac.itch.io/target-toss](https://trysac.itch.io/target-toss)
+- **Get the code:** fork this repository, or clone it:
+
+  ```bash
+  git clone https://github.com/Trysac/Unit-5-User-Interface.git
+  ```
+
 ## Run it
 
 1. Install **Unity 6000.3.27f1 (Unity 6 LTS)** with Unity Hub (add the Windows or Web build
