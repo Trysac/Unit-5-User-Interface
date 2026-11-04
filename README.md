@@ -5,6 +5,8 @@ pops into a combo multiplier, leave the spiky balls alone and never touch a bomb
 60-second Timed round or a three-life Lives round on Easy, Normal or Hard, with a mouse, a
 touch screen or a gamepad.
 
+![Gameplay](docs/media/gameplay.gif)
+
 It started in 2021 as my take on **Prototype 5 ("Clicky Mouse") from Unit 5 of the Unity Learn
 Junior Programmer pathway**, and was rebuilt on that idea as an original game (see
 [Where it came from](#where-it-came-from)).
