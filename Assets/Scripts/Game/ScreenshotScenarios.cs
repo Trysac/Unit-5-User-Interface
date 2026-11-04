@@ -13,6 +13,9 @@ namespace TargetToss.Game
     /// (which have no command line) are unaffected. The same hook runs inside the editor
     /// (ProjectBuilder.CaptureScreenshots), which renders the camera and the HUD off screen and
     /// blends them, for machines that cannot run the player.
+    /// With <c>-frames N -fps F</c> each scenario is recorded instead as N numbered frames
+    /// (<c>&lt;folder&gt;/&lt;scenario&gt;/frame_0000.png</c>) at a fixed timestep of 1/F seconds;
+    /// the <c>gameplay</c> scenario plays a round with a scripted player for the README GIF.
     /// </summary>
     public sealed class ScreenshotScenarios : MonoBehaviour
     {
@@ -25,6 +28,10 @@ namespace TargetToss.Game
         RenderTexture sceneTarget;
         RenderTexture uiTarget;
         GameDirector director;
+        int frames;
+        int fps = 15;
+        int nextTarget;
+        float clickCooldown;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void StartWhenRequested()
@@ -37,6 +44,11 @@ namespace TargetToss.Game
             var host = new GameObject(nameof(ScreenshotScenarios)).AddComponent<ScreenshotScenarios>();
             host.folder = target;
             host.scenarios = (Argument("-scenario") ?? DefaultScenarios).Split(',');
+            int.TryParse(Argument("-frames"), out host.frames);
+            if (int.TryParse(Argument("-fps"), out int rate) && rate > 0)
+            {
+                host.fps = rate;
+            }
         }
 
         IEnumerator Start()
@@ -55,6 +67,11 @@ namespace TargetToss.Game
                 director.Seed(StableSeed(scenario));
                 director.ScriptedCursor = null;
                 yield return Stage(scenario);
+                if (frames > 0)
+                {
+                    yield return Record(scenario);
+                    continue;
+                }
                 Texture2D shot;
                 if (Application.isEditor)
                 {
@@ -161,9 +178,101 @@ namespace TargetToss.Game
                     }
                     yield return new WaitForSecondsRealtime(0.6f);
                     break;
+                case "gameplay":
+                    UnityEngine.Random.InitState(7);
+                    yield return Play(GameMode.Timed, 5);
+                    director.Round.Spawning = true;
+                    director.ScriptedCursor = new Vector2(0f, 0f);
+                    yield return new WaitForSecondsRealtime(0.6f);
+                    break;
                 default:
                     Debug.LogWarning($"Unknown screenshot scenario '{scenario}'.");
                     break;
+            }
+        }
+
+        /// <summary>Writes <see cref="frames"/> frames of the scenario at a fixed timestep.</summary>
+        IEnumerator Record(string scenario)
+        {
+            string target = Path.Combine(folder, scenario);
+            Directory.CreateDirectory(target);
+            Time.captureFramerate = fps;
+            for (int i = 0; i < frames; i++)
+            {
+                if (scenario == "gameplay")
+                {
+                    PlayStep(1f / fps);
+                }
+                yield return null;
+                Texture2D shot;
+                if (Application.isEditor)
+                {
+                    shot = CaptureOffscreen();
+                }
+                else
+                {
+                    yield return new WaitForEndOfFrame();
+                    shot = ScreenCapture.CaptureScreenshotAsTexture();
+                }
+                File.WriteAllBytes(Path.Combine(target, $"frame_{i:0000}.png"), shot.EncodeToPNG());
+                Destroy(shot);
+            }
+            Time.captureFramerate = 0;
+            Debug.Log($"Saved {frames} frames of {scenario}");
+        }
+
+        /// <summary>
+        /// One frame of the scripted player: glide the reticle to the safe target nearest to it
+        /// once it is well on screen, pop it, and keep away from spiky balls and bombs. Extra
+        /// candy is tossed in so the GIF stays busy.
+        /// </summary>
+        void PlayStep(float dt)
+        {
+            Round round = director.Round;
+            if (round == null || round.IsOver)
+            {
+                return;
+            }
+            nextTarget -= 1;
+            if (nextTarget <= 0)
+            {
+                nextTarget = Mathf.RoundToInt(fps * 0.32f);
+                float x = UnityEngine.Random.Range(-5.5f, 5.5f);
+                float roll = UnityEngine.Random.value;
+                TargetKind kind = roll < 0.12f ? TargetKind.Bonus : roll < 0.24f ? TargetKind.Bad : roll < 0.32f ? TargetKind.Bomb : TargetKind.Good;
+                float rise = UnityEngine.Random.Range(11.5f, 13.5f);
+                round.Place(kind, new Vec2(x, Field.LaunchY), new Vec2(-x * 0.12f, rise), UnityEngine.Random.Range(-90f, 90f),
+                    UnityEngine.Random.Range(0, 3));
+            }
+            Vector2 cursor = director.ScriptedCursor ?? Vector2.zero;
+            Target best = null;
+            float bestDistance = float.MaxValue;
+            foreach (Target candidate in round.Targets)
+            {
+                if (candidate.Kind == TargetKind.Bad || candidate.Kind == TargetKind.Bomb || candidate.Position.Y < -2.2f)
+                {
+                    continue;
+                }
+                float distance = Vector2.Distance(cursor, new Vector2(candidate.Position.X, candidate.Position.Y));
+                if (distance < bestDistance)
+                {
+                    bestDistance = distance;
+                    best = candidate;
+                }
+            }
+            if (best == null)
+            {
+                director.ScriptedCursor = Vector2.MoveTowards(cursor, new Vector2(0f, 0.5f), 6f * dt);
+                return;
+            }
+            var aim = new Vector2(best.Position.X, best.Position.Y);
+            cursor = Vector2.MoveTowards(cursor, aim, 26f * dt);
+            director.ScriptedCursor = cursor;
+            clickCooldown -= dt;
+            if (clickCooldown <= 0f && Vector2.Distance(cursor, aim) < best.Radius * 0.6f)
+            {
+                director.ClickWorld(aim);
+                clickCooldown = 0.12f;
             }
         }
 
